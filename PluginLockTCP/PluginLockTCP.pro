@@ -3,7 +3,7 @@
 # https://robodk.com/CreatePlugin
 
 # Clear some space in the General Messages window
-message(".")
+message("START")
 message(".")
 message(".")
 message(".")
@@ -77,7 +77,7 @@ CONFIG(release, debug|release) {
 
 }
 }
-
+message("DIR = $$DESTDIR")
 
 #--------------------------
 # Add header and source files (use File->New File or Project and add your files)
@@ -109,3 +109,5 @@ SOURCES += \
 
 INCLUDEPATH += ../robodk_interface
 #--------------------------
+
+message("DONE")
