@@ -20,3 +20,11 @@ jobs:
           dir %Qt5_DIR%/lib/cmake
           qmake
         shell: cmd
+
+      - name: Upload artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: |
+            C:/RoboDK/bin/plugins
+            C:/RoboDK/bind/plugins
