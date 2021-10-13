@@ -5,26 +5,38 @@ jobs:
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
+     
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
 
-      - name: Install Qt
+      - name: "npm ci"
+        run: npm ci
+
+      - name: "npm run build"
+        run: |
+          npm run build-setup-python
+          npm run build
+          
+      - name: Install Qt with options
         uses: jurplel/install-qt-action@v2.14.0
         with:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
+          tools: qt.tools.qtcreator'
 
       - name: Configure test project on windows
         run: |
           cd PluginLockTCP
+          echo "MS batch script"
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          echo "List in CMAKE"
+          echo %Qt5_DIR%
           dir %Qt5_DIR%/lib/cmake
+          echo "QMAKE"
           qmake
+          echo "Print outputs"
+          dir C:\RoboDK\bin\plugins
+          dir C:\RoboDK\bind\plugins
         shell: cmd
-
-      - name: Upload artefacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: |
-            C:/RoboDK/bin/plugins
-            C:/RoboDK/bind/plugins
