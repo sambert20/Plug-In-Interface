@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest] #, windows-latest, macos-latest]
         version: ['5.15.2']
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/PluginLockTCP
           qmake CONFIG+=release
-          cmake ${{ github.workspace }}/PluginLockTCP
+          make
         shell: bash
         
       - name: Configure and build PluginAppLoader on Windows
@@ -48,7 +48,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/PluginAppLoader
           qmake CONFIG+=release
-          cmake ${{ github.workspace }}/PluginAppLoader
+          make
         shell: bash
         
       - name: Upload artefacts on Windows
