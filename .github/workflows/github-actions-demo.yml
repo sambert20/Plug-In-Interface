@@ -24,7 +24,9 @@ jobs:
           dir %Qt5_DIR%/lib/cmake
           echo "QMAKE"
           qmake
+          nmake
           echo "Print outputs"
           dir C:\RoboDK\bin\plugins
           dir C:\RoboDK\bind\plugins
+          dir
         shell: cmd
