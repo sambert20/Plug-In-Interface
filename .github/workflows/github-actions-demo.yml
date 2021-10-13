@@ -15,7 +15,7 @@ jobs:
 
       - name: Configure and build PluginLockTCP on Windows
         run: |
-          cd PluginLockTCP
+          cd ${{ github.workspace }}\PluginLockTCP
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake CONFIG+=release
           nmake
@@ -23,8 +23,7 @@ jobs:
         
       - name: Configure and build PluginAppLoader on Windows
         run: |
-          cd ..
-          cd PluginAppLoader
+          cd ${{ github.workspace }}\PluginAppLoader
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake CONFIG+=release
           nmake
