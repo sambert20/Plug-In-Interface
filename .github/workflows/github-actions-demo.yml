@@ -31,7 +31,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/PluginLockTCP
           qmake CONFIG+=release
-          nmake
+          cmake
         shell: bash
         
       - name: Configure and build PluginAppLoader on Windows
@@ -46,7 +46,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/PluginAppLoader
           qmake CONFIG+=release
-          nmake
+          cmake
         shell: bash
         
       - name: Upload artefacts on Windows
