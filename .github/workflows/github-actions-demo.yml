@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest] #, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         version: ['5.15.2']
     steps:
       - uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
             
       - name: Upload artefacts on Linux
         uses: actions/upload-artifact@v2
-        if: (startsWith(matrix.os, 'unbuntu'))
+        if: (startsWith(matrix.os, 'ubuntu'))
         with:
           name: Plugins-linux-x64
           path: |
