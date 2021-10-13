@@ -17,16 +17,15 @@ jobs:
       - name: Configure test project on windows
         run: |
           cd PluginLockTCP
-          echo "MS batch script"
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          echo "List in CMAKE"
-          echo %Qt5_DIR%
-          dir %Qt5_DIR%/lib/cmake
-          echo "QMAKE"
-          qmake
+          qmake CONFIG+=release
           nmake
-          echo "Print outputs"
-          dir C:\RoboDK\bin\plugins
-          dir C:\RoboDK\bind\plugins
-          dir
         shell: cmd
+        
+      - name: Upload artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: |
+            C:\RoboDK\bin\plugins
+			
