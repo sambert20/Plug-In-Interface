@@ -12,11 +12,19 @@ jobs:
           version: '5.15.2'
           host: 'windows'
           target: 'desktop'
-          tools: qt.tools.qtcreator'
 
-      - name: Configure test project on windows
+      - name: Configure and build PluginLockTCP on Windows
         run: |
           cd PluginLockTCP
+          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          qmake CONFIG+=release
+          nmake
+        shell: cmd
+        
+      - name: Configure and build PluginAppLoader on Windows
+        run: |
+          cd ..
+          cd PluginAppLoader
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake CONFIG+=release
           nmake
