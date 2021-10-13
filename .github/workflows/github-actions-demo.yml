@@ -31,10 +31,11 @@ jobs:
         run: |
           cd ${{ github.workspace }}/PluginLockTCP
           qmake CONFIG+=release
-          cmake
+          cmake ${{ github.workspace }}/PluginLockTCP
         shell: bash
         
       - name: Configure and build PluginAppLoader on Windows
+        if: startsWith(matrix.os, 'windows')
         run: |
           cd ${{ github.workspace }}/PluginAppLoader
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
@@ -43,10 +44,11 @@ jobs:
         shell: cmd
         
       - name: Configure and build PluginAppLoader on Unix
+        if: (!startsWith(matrix.os, 'windows'))
         run: |
           cd ${{ github.workspace }}/PluginAppLoader
           qmake CONFIG+=release
-          cmake
+          cmake ${{ github.workspace }}/PluginAppLoader
         shell: bash
         
       - name: Upload artefacts on Windows
