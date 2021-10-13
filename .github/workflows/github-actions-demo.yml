@@ -28,4 +28,3 @@ jobs:
           name: my-artifact
           path: |
             C:\RoboDK\bin\plugins
-			
