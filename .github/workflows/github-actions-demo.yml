@@ -29,14 +29,14 @@ jobs:
       - name: Configure and build PluginLockTCP on Unix
         if: (!startsWith(matrix.os, 'windows'))
         run: |
-          cd ${{ github.workspace }}\PluginLockTCP
+          cd ${{ github.workspace }}/PluginLockTCP
           qmake CONFIG+=release
           nmake
         shell: bash
         
       - name: Configure and build PluginAppLoader on Windows
         run: |
-          cd ${{ github.workspace }}\PluginAppLoader
+          cd ${{ github.workspace }}/PluginAppLoader
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake CONFIG+=release
           nmake
@@ -44,14 +44,31 @@ jobs:
         
       - name: Configure and build PluginAppLoader on Unix
         run: |
-          cd ${{ github.workspace }}\PluginAppLoader
+          cd ${{ github.workspace }}/PluginAppLoader
           qmake CONFIG+=release
           nmake
         shell: bash
         
-      - name: Upload artefacts
+      - name: Upload artefacts on Windows
         uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'windows')
         with:
-          name: my-artifact
+          name: Plugins-Windows-x64
           path: |
-            C:\RoboDK\bin\plugins
+            C:/RoboDK/bin/plugins
+            
+      - name: Upload artefacts on Linux
+        uses: actions/upload-artifact@v2
+        if: (startsWith(matrix.os, 'unbuntu'))
+        with:
+          name: Plugins-linux-x64
+          path: |
+            ~/RoboDK/bin/plugins
+
+      - name: Upload artefacts on macOS
+        uses: actions/upload-artifact@v2
+        if: (startsWith(matrix.os, 'macos'))
+        with:
+          name: Plugins-macos-x64
+          path: |
+            ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
