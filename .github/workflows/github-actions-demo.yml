@@ -16,19 +16,17 @@ jobs:
             OUTPUT_DIR: C:/RoboDK/bin/plugins
             QT_VERSION: '5.15.2'
             MAKE: nmake
-            ADD_PARAMS: call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+            environment_script: "%programfiles(x86)%/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 
-          - os: ubuntu-latest
-            OUTPUT_DIR: ~/RoboDK/bin/plugins
-            QT_VERSION: '5.15.2'
-            MAKE: make
-            ADD_PARAMS: ""
+          #- os: ubuntu-latest
+          #  OUTPUT_DIR: ~/RoboDK/bin/plugins
+          #  QT_VERSION: '5.15.2'
+          #  MAKE: make
 
-          - os: macos-latest
-            OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
-            QT_VERSION: '5.15.2'
-            MAKE: make
-            ADD_PARAMS: ""
+          #- os: macos-latest
+          #  OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
+          #  QT_VERSION: '5.15.2'
+          #  MAKE: make
 
     steps:
       - uses: actions/checkout@v2
@@ -41,14 +39,12 @@ jobs:
       - name: Configure and build PluginLockTCP
         run: |
           cd ${{ github.workspace }}/PluginLockTCP
-          ${{ matrix.ADD_PARAMS }}
           qmake CONFIG+=${{ env.BUILD_TYPE }}
           ${{ matrix.MAKE }}
 
       - name: Configure and build PluginAppLoader
         run: |
           cd ${{ github.workspace }}/PluginAppLoader
-          ${{matrix.ADD_PARAMS}}
           qmake CONFIG+=${{ env.BUILD_TYPE }}
           ${{ env.MAKE }}
 
