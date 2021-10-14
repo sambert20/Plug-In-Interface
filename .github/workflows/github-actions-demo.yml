@@ -37,12 +37,14 @@ jobs:
           version: ${{ matrix.QT_VERSION }}
 
       - name: Configure and build PluginLockTCP
+        shell: bash
         run: |
           cd ${{ github.workspace }}/PluginLockTCP
           qmake CONFIG+=${{ env.BUILD_TYPE }}
           ${{ matrix.MAKE }}
 
       - name: Configure and build PluginAppLoader
+        shell: bash
         run: |
           cd ${{ github.workspace }}/PluginAppLoader
           qmake CONFIG+=${{ env.BUILD_TYPE }}
