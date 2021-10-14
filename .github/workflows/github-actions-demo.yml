@@ -2,75 +2,63 @@ name: Build plugins
 
 on: [push]
 
+env:
+  BUILD_TYPE: release
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        version: ['5.15.2']
+        include:
+          - os: windows-latest
+            OUTPUT_DIR: C:/RoboDK/bin/plugins
+            QT_VERSION: '5.15.2'
+            SHELL: cmd
+            MAKE: nmake
+            ADD_PARAMS: call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+
+          - os: ubuntu-latest
+            OUTPUT_DIR: ~/RoboDK/bin/plugins
+            QT_VERSION: '5.15.2'
+            SHELL: bash
+            MAKE: make
+            ADD_PARAMS: ""
+
+          - os: macos-latest
+            OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
+            QT_VERSION: '5.15.2'
+            SHELL: bash
+            MAKE: make
+            ADD_PARAMS: ""
+
     steps:
       - uses: actions/checkout@v2
-          
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.14.0
         with:
-          version: ${{ matrix.version }}
+          version: ${{ matrix.QT_VERSION }}
 
-      - name: Configure and build PluginLockTCP on Windows
-        if: startsWith(matrix.os, 'windows')
-        run: |
-          cd ${{ github.workspace }}\PluginLockTCP
-          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          qmake CONFIG+=release
-          nmake
-        shell: cmd
-        
-      - name: Configure and build PluginLockTCP on Unix
-        if: (!startsWith(matrix.os, 'windows'))
+      - name: Configure and build PluginLockTCP
         run: |
           cd ${{ github.workspace }}/PluginLockTCP
-          qmake CONFIG+=release
-          make
-        shell: bash
-        
-      - name: Configure and build PluginAppLoader on Windows
-        if: startsWith(matrix.os, 'windows')
-        run: |
-          cd ${{ github.workspace }}/PluginAppLoader
-          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          qmake CONFIG+=release
-          nmake
-        shell: cmd
-        
-      - name: Configure and build PluginAppLoader on Unix
-        if: (!startsWith(matrix.os, 'windows'))
-        run: |
-          cd ${{ github.workspace }}/PluginAppLoader
-          qmake CONFIG+=release
-          make
-        shell: bash
-        
-      - name: Upload artefacts on Windows
-        uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'windows')
-        with:
-          name: Plugins-Windows-x64_2
-          path: |
-            C:/RoboDK/bin/plugins
-            
-      - name: Upload artefacts on Linux
-        uses: actions/upload-artifact@v2
-        if: (startsWith(matrix.os, 'ubuntu'))
-        with:
-          name: Plugins-linux-x64
-          path: |
-            ~/RoboDK/bin/plugins
+          ${{ matrix.ADD_PARAMS }}
+          qmake CONFIG+=${{ env.BUILD_TYPE }}
+          ${{ matrix.MAKE }}
+        shell: ${{ matrix.SHELL }}
 
-      - name: Upload artefacts on macOS
+      - name: Configure and build PluginAppLoader
+        run: |
+          cd ${{ github.workspace }}/PluginAppLoader
+          ${{matrix.ADD_PARAMS}}
+          qmake CONFIG+=${{ env.BUILD_TYPE }}
+          ${{ env.MAKE }}
+        shell: ${{ env.SHELL }}
+
+      - name: Upload artefacts
         uses: actions/upload-artifact@v2
-        if: (startsWith(matrix.os, 'macos'))
         with:
-          name: Plugins-macos-x64
-          path: |
-            ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
+          name: Plug-In-Interface-${{ matrix.os }}-${{ env.BUILD_TYPE }}
+          path: ${{ matrix.OUTPUT_DIR }}
