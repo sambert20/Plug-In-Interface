@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: startsWith(matrix.os, 'windows')
         with:
-          name: Plugins-Windows-x64
+          name: Plugins-Windows-x64_2
           path: |
             C:/RoboDK/bin/plugins
             
