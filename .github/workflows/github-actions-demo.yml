@@ -15,7 +15,6 @@ jobs:
           - os: windows-latest
             OUTPUT_DIR: C:/RoboDK/bin/plugins
             QT_VERSION: '5.15.2'
-            #environment_script: "%programfiles(x86)%/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 
           - os: ubuntu-latest
             OUTPUT_DIR: ~/RoboDK/bin/plugins
@@ -37,9 +36,9 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         run: |
           cd ${{ github.workspace }}
-          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          qmake CONFIG+=${{ env.BUILD_TYPE }}
-          nmake
+          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+          qmake Plug-In-Interface.pro -spec win32-msvc CONFIG+=qtquickcompiler
+          jom -f Makefile.Release
         shell: cmd
 
       - name: Configure and build Plug-In-Interface on Unix
