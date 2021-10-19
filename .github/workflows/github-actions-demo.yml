@@ -16,13 +16,13 @@ jobs:
             OUTPUT_DIR: C:/RoboDK/bin/plugins
             QT_VERSION: '5.15.2'
 
-          - os: ubuntu-latest
-            OUTPUT_DIR: ~/RoboDK/bin/plugins
-            QT_VERSION: '5.15.2'
+          #- os: ubuntu-latest
+          #  OUTPUT_DIR: ~/RoboDK/bin/plugins
+          #  QT_VERSION: '5.15.2'
 
-          - os: macos-latest
-            OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
-            QT_VERSION: '5.15.2'
+          #- os: macos-latest
+          #  OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
+          #  QT_VERSION: '5.15.2'
 
     steps:
       - uses: actions/checkout@v2
@@ -30,6 +30,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.14.0
         with:
+          tools: 'tools_qtcreator,4,qt.tools.qtcreator'
           version: ${{ matrix.QT_VERSION }}
 
       - name: Configure and build Plug-In-Interface on Windows
@@ -38,7 +39,7 @@ jobs:
           cd ${{ github.workspace }}
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
           qmake Plug-In-Interface.pro -spec win32-msvc CONFIG+=qtquickcompiler
-          jom -f Makefile.Release
+          %QT5_DIR%\Tools\QtCreator\bin\jom.exe -f Makefile.Release
         shell: cmd
 
       - name: Configure and build Plug-In-Interface on Unix
