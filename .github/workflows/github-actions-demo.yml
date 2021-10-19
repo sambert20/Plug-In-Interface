@@ -9,24 +9,21 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
             OUTPUT_DIR: C:/RoboDK/bin/plugins
             QT_VERSION: '5.15.2'
-            MAKE: nmake
-            environment_script: "%programfiles(x86)%/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+            #environment_script: "%programfiles(x86)%/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 
-          #- os: ubuntu-latest
-          #  OUTPUT_DIR: ~/RoboDK/bin/plugins
-          #  QT_VERSION: '5.15.2'
-          #  MAKE: make
+          - os: ubuntu-latest
+            OUTPUT_DIR: ~/RoboDK/bin/plugins
+            QT_VERSION: '5.15.2'
 
-          #- os: macos-latest
-          #  OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
-          #  QT_VERSION: '5.15.2'
-          #  MAKE: make
+          - os: macos-latest
+            OUTPUT_DIR: ~/RoboDK-Dev/Deploy/RoboDK.app/Contents/MacOS/plugins
+            QT_VERSION: '5.15.2'
 
     steps:
       - uses: actions/checkout@v2
@@ -36,19 +33,22 @@ jobs:
         with:
           version: ${{ matrix.QT_VERSION }}
 
-      - name: Configure and build PluginLockTCP
-        shell: bash
+      - name: Configure and build Plug-In-Interface on Windows
+        if: startsWith(matrix.os, 'windows')
         run: |
-          cd ${{ github.workspace }}/PluginLockTCP
+          cd ${{ github.workspace }}
+          call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake CONFIG+=${{ env.BUILD_TYPE }}
-          ${{ matrix.MAKE }}
+          nmake
+        shell: cmd
 
-      - name: Configure and build PluginAppLoader
-        shell: bash
+      - name: Configure and build Plug-In-Interface on Unix
+        if: (!startsWith(matrix.os, 'windows'))
         run: |
-          cd ${{ github.workspace }}/PluginAppLoader
+          cd ${{ github.workspace }}
           qmake CONFIG+=${{ env.BUILD_TYPE }}
-          ${{ env.MAKE }}
+          make
+        shell: bash
 
       - name: Upload artefacts
         uses: actions/upload-artifact@v2
