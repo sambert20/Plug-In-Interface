@@ -12,12 +12,12 @@ QMAKE_CXXFLAGS+=-Wno-comment
 TEMPLATE = subdirs
 
 SUBDIRS += PluginAppLoader/AppLoader.pro
-#SUBDIRS += PluginExample/PluginExample.pro
+SUBDIRS += PluginExample/PluginExample.pro
 SUBDIRS += PluginLockTCP/PluginLockTCP.pro
-#SUBDIRS += Plugin-OPC-UA/PluginOPCUA.pro
-#SUBDIRS += PluginOpenGL/PluginOpengl.pro
-#win32 {
-#SUBDIRS += PluginOpenGL-Shaders/PluginChip8Opengl.pro
-#}
-#SUBDIRS += PluginRealTime/PluginRealTime.pro
-#SUBDIRS += PluginRobotPilot/PluginRobotPilot.pro
+SUBDIRS += Plugin-OPC-UA/PluginOPCUA.pro
+SUBDIRS += PluginOpenGL/PluginOpengl.pro
+win32 {
+SUBDIRS += PluginOpenGL-Shaders/PluginChip8Opengl.pro
+}
+SUBDIRS += PluginRealTime/PluginRealTime.pro
+SUBDIRS += PluginRobotPilot/PluginRobotPilot.pro
