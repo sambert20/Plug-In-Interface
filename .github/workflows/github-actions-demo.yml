@@ -39,8 +39,7 @@ jobs:
           cd ${{ github.workspace }}
           call "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
           qmake Plug-In-Interface.pro -spec win32-msvc CONFIG+=qtquickcompiler
-          ls %IQTA_TOOLS%
-          %IQTA_TOOLS%\QtCreator\bin\jom.exe -f Makefile.Release
+          call %IQTA_TOOLS%\QtCreator\bin\jom.exe -f Makefile.Release
         shell: cmd
 
       - name: Configure and build Plug-In-Interface on Unix
